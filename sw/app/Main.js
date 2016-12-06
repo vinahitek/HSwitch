@@ -143,7 +143,8 @@ export default class ControlPanel extends Component {
           <Text style={styles.label}>Led1</Text>
           <Switch
             onValueChange={(value) => {
-            led1config(value)this.setState({state_switch1: value})
+            led1config(value);
+            this.setState({state_switch1: value})
           }}
             style={styles.rowInput}
             value={this.state.state_switch1}/>
@@ -153,7 +154,8 @@ export default class ControlPanel extends Component {
           <Text style={styles.label}>Led2</Text>
           <Switch
             onValueChange={(value) => {
-            led2config(value)this.setState({state_switch2: value})
+            led2config(value);
+            this.setState({state_switch2: value})
           }}
             style={styles.rowInput}
             value={this.state.state_switch2}/>
@@ -163,7 +165,8 @@ export default class ControlPanel extends Component {
           <Text style={styles.label}>Led2</Text>
           <Switch
             onValueChange={(value) => {
-            led3config(value)this.setState({state_switch3: value})
+            led3config(value);
+            this.setState({state_switch3: value})
           }}
             style={styles.rowInput}
             value={this.state.state_switch3}/>
