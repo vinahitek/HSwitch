@@ -39,10 +39,8 @@ async function mqttconnect() {
   // })
   let connectedstatus=false;
   return new Promise((resolve, reject) => {
-    mqtt
-      .createClient(optionconnect)
+    mqtt.createClient(optionconnect)
       .then(function (client) {
-
         client
           .on('closed', function () {
             console.log('mqtt.event.closed');
