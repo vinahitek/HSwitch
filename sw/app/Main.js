@@ -17,11 +17,8 @@ import {MqttClient} from 'react-native-mqtt';
 var mqtt = require('react-native-mqtt');
 var client_mqtt = undefined;
 
-async function mqttconnect() {
-  // let clientret = undefined;
-  // if (client_mqtt != undefined) {
-  //   return;
-  // }
+async function mqttconnect(IsConnected) {
+  
   var clientid = "web_" + parseInt(Math.random() * 100, 10);
   console.log(clientid);
   /* create mqtt client */
@@ -33,13 +30,19 @@ async function mqttconnect() {
     pass: "qODam8loOrFl",
     auth: true
   };
-
+  
   // return new Promise((resolve, reject) => {
   //   setTimeout(resolve, 10000)
   // })
   let connectedstatus=false;
   return new Promise((resolve, reject) => {
-    mqtt.createClient(optionconnect)
+     if(IsConnected)
+     {resolve(true);
+
+       }
+       else
+       {
+     mqtt.createClient(optionconnect)
       .then(function (client) {
         client
           .on('closed', function () {
@@ -63,16 +66,17 @@ async function mqttconnect() {
           client.subscribe('/data', 0);
           client.publish('/data', "test", 0, false);
           connectedstatus=true;
+          resolve(connectedstatus);
         });
 
         client.connect();
-        resolve(connectedstatus)
+        
       })
       .catch(function (err) {
         console.log(err);
         reject(err)
       });
-
+       }
   })
 }
 
@@ -129,10 +133,17 @@ export default class ControlPanel extends Component {
 
           <Button
             onPress={() => {
-            mqttconnect().then((isconnect) => {
-              this.setState({serverisconnected: isconnect});
-              console.log("server is connected ", this.state.serverisconnected);
-            })
+              mqttconnect(this.state.serverisconnected).then((resolve)=>
+              {
+                  console.log(resolve);
+                  this.setState({serverisconnected: resolve});
+              });
+           
+            
+            // .then((isconnect) => {
+            //   this.setState({serverisconnected: isconnect});
+            //   console.log("server is connected ", this.state.serverisconnected);
+            // })
           }}
             text={connectedtext}/>
         </View>
