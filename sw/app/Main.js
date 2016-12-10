@@ -1,3 +1,4 @@
+'use strict';
 import React, {PropTypes, Component} from 'react';
 import {
   Switch,
@@ -7,15 +8,18 @@ import {
   TouchableOpacity,
   View,
   Platform,
-  AsyncStorage
+  AsyncStorage,
+  ActivityIndicator
 } from 'react-native'
 
+//var Spinner = require('react-native-spinkit');
 import styles from './styles';
 import Button from './Button';
 import {MqttClient} from 'react-native-mqtt';
 
 var mqtt = require('react-native-mqtt');
 var client_mqtt = undefined;
+
 
 async function mqttconnect(IsConnected) {
   
@@ -37,8 +41,8 @@ async function mqttconnect(IsConnected) {
   let connectedstatus=false;
   return new Promise((resolve, reject) => {
      if(IsConnected)
-     {resolve(true);
-
+     {
+       resolve(true);
        }
        else
        {
@@ -61,10 +65,10 @@ async function mqttconnect(IsConnected) {
 
         client.on('connect', function () {
           client_mqtt = client;
-          clientret = client;
+          //clientret = client;
           console.log('connected');
-          client.subscribe('/data', 0);
-          client.publish('/data', "test", 0, false);
+          //client.subscribe('/data', 0);
+          //client.publish('/data', "test", 0, false);
           connectedstatus=true;
           resolve(connectedstatus);
         });
@@ -111,7 +115,8 @@ export default class ControlPanel extends Component {
     state_switch1: false,
     state_switch2: false,
     state_switch3: false,
-    serverisconnected: false
+    serverisconnected: false,
+    isVisible:true
   }
 
   render() {
@@ -136,16 +141,17 @@ export default class ControlPanel extends Component {
               mqttconnect(this.state.serverisconnected).then((resolve)=>
               {
                   console.log(resolve);
-                  this.setState({serverisconnected: resolve});
+                  this.setState({serverisconnected: resolve,
+                    isVisible:!resolve});
+                  
+                
               });
-           
-            
-            // .then((isconnect) => {
-            //   this.setState({serverisconnected: isconnect});
-            //   console.log("server is connected ", this.state.serverisconnected);
-            // })
           }}
             text={connectedtext}/>
+
+            //<Spinner style={styles.spinner} isVisible={this.state.isVisible} size={75} type={'Circle'} color={"#FFFFFF"}/>
+
+            
         </View>
 
         <View style={styles.container}>
@@ -203,7 +209,10 @@ var iosStyles = StyleSheet.create({
     },
     shadowRadius: 5,
     shadowOpacity: 0.75
-  }
+  },
+  spinner: {
+    marginBottom: 50
+},
 });
 
 // Android styles
@@ -234,7 +243,10 @@ const androidStyles = StyleSheet.create({
     position: 'absolute',
     backgroundColor: 'green',
     opacity: 0.5
-  }
+  },
+  spinner: {
+    marginBottom: 50
+  },
 });
 
 const sliderStyles = (Platform.OS === 'ios')

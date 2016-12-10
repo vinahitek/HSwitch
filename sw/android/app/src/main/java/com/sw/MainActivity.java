@@ -1,6 +1,10 @@
 package com.sw;
 
 import com.facebook.react.ReactActivity;
+import com.react.rnspinkit.RNSpinkitPackage;
+import com.tuanpm.RCTMqtt.RCTMqttPackage;
+
+
 
 public class MainActivity extends ReactActivity {
 

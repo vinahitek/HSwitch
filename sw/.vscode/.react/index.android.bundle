@@ -73365,7 +73365,8 @@ borderWidth:1,
 borderColor:'black',
 padding:10}});
 }, 552, null, "sw/app/ControlPanel.js");
-__d(/* sw/app/Main.js */function(global, require, module, exports) {Object.defineProperty(exports,"__esModule",{value:true});var _react=require(12 /* react */);var _react2=babelHelpers.interopRequireDefault(_react);
+__d(/* sw/app/Main.js */function(global, require, module, exports) {'use strict';Object.defineProperty(exports,"__esModule",{value:true});
+var _react=require(12 /* react */);var _react2=babelHelpers.interopRequireDefault(_react);
 var _reactNative=require(42 /* react-native */);
 
 
@@ -73377,12 +73378,57 @@ var _reactNative=require(42 /* react-native */);
 
 
 
-var _styles=require(554 /* ./styles */);var _styles2=babelHelpers.interopRequireDefault(_styles);
-var _Button=require(555 /* ./Button */);var _Button2=babelHelpers.interopRequireDefault(_Button);
-var _reactNativeMqtt=require(556 /* react-native-mqtt */);
 
-var mqtt=require(556 /* react-native-mqtt */);
-var client_mqtt=undefined;
+var _styles=require(555 /* ./styles */);var _styles2=babelHelpers.interopRequireDefault(_styles);
+var _Button=require(556 /* ./Button */);var _Button2=babelHelpers.interopRequireDefault(_Button);
+var _reactNativeMqtt=require(557 /* react-native-mqtt */);
+
+var mqtt=require(557 /* react-native-mqtt */);
+var client_mqtt=undefined;var
+
+
+
+
+
+ToggleAnimatingActivityIndicator=function(_Component){babelHelpers.inherits(ToggleAnimatingActivityIndicator,_Component);
+
+
+
+
+
+
+function ToggleAnimatingActivityIndicator(props){babelHelpers.classCallCheck(this,ToggleAnimatingActivityIndicator);var _this=babelHelpers.possibleConstructorReturn(this,(ToggleAnimatingActivityIndicator.__proto__||Object.getPrototypeOf(ToggleAnimatingActivityIndicator)).call(this,
+props));
+_this.state={
+animating:true};return _this;
+
+}babelHelpers.createClass(ToggleAnimatingActivityIndicator,[{key:'componentDidMount',value:function componentDidMount()
+
+{
+this.setToggleTimeout();
+}},{key:'componentWillUnmount',value:function componentWillUnmount()
+
+{
+clearTimeout(this._timer);
+}},{key:'setToggleTimeout',value:function setToggleTimeout()
+
+{var _this2=this;
+this._timer=setTimeout(function(){
+_this2.setState({animating:!_this2.state.animating});
+_this2.setToggleTimeout();
+},2000);
+}},{key:'render',value:function render()
+
+{
+return(
+_react2.default.createElement(_reactNative.ActivityIndicator,{
+animating:this.state.animating,
+style:[_styles2.default.centering,{height:80}],
+size:'large'}));
+
+
+}}]);return ToggleAnimatingActivityIndicator;}(_react.Component);
+
 
 function mqttconnect(IsConnected){var clientid,optionconnect,connectedstatus;return regeneratorRuntime.async(function mqttconnect$(_context){while(1){switch(_context.prev=_context.next){case 0:
 
@@ -73404,8 +73450,8 @@ auth:true};
 connectedstatus=false;return _context.abrupt('return',
 new Promise(function(resolve,reject){
 if(IsConnected)
-{resolve(true);
-
+{
+resolve(true);
 }else
 
 {
@@ -73428,10 +73474,10 @@ console.log('mqtt.event.message',msg);
 
 client.on('connect',function(){
 client_mqtt=client;
-clientret=client;
+
 console.log('connected');
-client.subscribe('/data',0);
-client.publish('/data',"test",0,false);
+
+
 connectedstatus=true;
 resolve(connectedstatus);
 });
@@ -73468,7 +73514,7 @@ client_mqtt.publish(client_mqtt.options.user+'/hungvotests/onoff',"16 "+(value==
 
 var drawerTypes=['overlay','displace','static'];var
 
-ControlPanel=function(_Component){babelHelpers.inherits(ControlPanel,_Component);function ControlPanel(){var _ref;var _temp,_this,_ret;babelHelpers.classCallCheck(this,ControlPanel);for(var _len=arguments.length,args=Array(_len),_key=0;_key<_len;_key++){args[_key]=arguments[_key];}return _ret=(_temp=(_this=babelHelpers.possibleConstructorReturn(this,(_ref=ControlPanel.__proto__||Object.getPrototypeOf(ControlPanel)).call.apply(_ref,[this].concat(args))),_this),_this.
+ControlPanel=function(_Component2){babelHelpers.inherits(ControlPanel,_Component2);function ControlPanel(){var _ref;var _temp,_this3,_ret;babelHelpers.classCallCheck(this,ControlPanel);for(var _len=arguments.length,args=Array(_len),_key=0;_key<_len;_key++){args[_key]=arguments[_key];}return _ret=(_temp=(_this3=babelHelpers.possibleConstructorReturn(this,(_ref=ControlPanel.__proto__||Object.getPrototypeOf(ControlPanel)).call.apply(_ref,[this].concat(args))),_this3),_this3.
 
 
 
@@ -73478,10 +73524,11 @@ state={
 state_switch1:false,
 state_switch2:false,
 state_switch3:false,
-serverisconnected:false},_temp),babelHelpers.possibleConstructorReturn(_this,_ret);}babelHelpers.createClass(ControlPanel,[{key:'render',value:function render()
+serverisconnected:false,
+animating:true},_temp),babelHelpers.possibleConstructorReturn(_this3,_ret);}babelHelpers.createClass(ControlPanel,[{key:'render',value:function render()
 
 
-{var _this2=this;
+{var _this4=this;
 
 var connectedtext=this.state.serverisconnected?
 "Disconnect":
@@ -73500,19 +73547,17 @@ _react2.default.createElement(_reactNative.Text,{style:_styles2.default.welcome}
 
 _react2.default.createElement(_Button2.default,{
 onPress:function onPress(){
-mqttconnect(_this2.state.serverisconnected).then(function(resolve)
+mqttconnect(_this4.state.serverisconnected).then(function(resolve)
 {
 console.log(resolve);
-_this2.setState({serverisconnected:resolve});
+_this4.setState({serverisconnected:resolve,
+animating:!resolve});
+
+
 });
-
-
-
-
-
-
 },
-text:connectedtext})),
+text:connectedtext}),
+_react2.default.createElement(_reactNative.ActivityIndicator,{style:[_styles2.default.centering,_styles2.default.gray],color:'white',animating:this.State.animating})),
 
 
 _react2.default.createElement(_reactNative.View,{style:_styles2.default.container},
@@ -73520,7 +73565,7 @@ _react2.default.createElement(_reactNative.Text,{style:_styles2.default.label},'
 _react2.default.createElement(_reactNative.Switch,{
 onValueChange:function onValueChange(value){
 led1config(value);
-_this2.setState({state_switch1:value});
+_this4.setState({state_switch1:value});
 },
 style:_styles2.default.rowInput,
 value:this.state.state_switch1})),
@@ -73531,7 +73576,7 @@ _react2.default.createElement(_reactNative.Text,{style:_styles2.default.label},'
 _react2.default.createElement(_reactNative.Switch,{
 onValueChange:function onValueChange(value){
 led2config(value);
-_this2.setState({state_switch2:value});
+_this4.setState({state_switch2:value});
 },
 style:_styles2.default.rowInput,
 value:this.state.state_switch2})),
@@ -73542,7 +73587,7 @@ _react2.default.createElement(_reactNative.Text,{style:_styles2.default.label},'
 _react2.default.createElement(_reactNative.Switch,{
 onValueChange:function onValueChange(value){
 led3config(value);
-_this2.setState({state_switch3:value});
+_this4.setState({state_switch3:value});
 },
 style:_styles2.default.rowInput,
 value:this.state.state_switch3}))));
@@ -73714,14 +73759,14 @@ borderBottomColor:'#aaaaaa',
 marginRight:20,
 marginLeft:20,
 alignSelf:'center'}});
-}, 554, null, "sw/app/styles.js");
+}, 555, null, "sw/app/styles.js");
 __d(/* sw/app/Button.js */function(global, require, module, exports) {Object.defineProperty(exports,"__esModule",{value:true});var _react=require(12 /* react */);var _react2=babelHelpers.interopRequireDefault(_react);
 var _reactNative=require(42 /* react-native */);
 
 
 
 
-var _styles=require(554 /* ./styles */);var _styles2=babelHelpers.interopRequireDefault(_styles);var
+var _styles=require(555 /* ./styles */);var _styles2=babelHelpers.interopRequireDefault(_styles);var
 
 Button=function(_Component){babelHelpers.inherits(Button,_Component);function Button(){babelHelpers.classCallCheck(this,Button);return babelHelpers.possibleConstructorReturn(this,(Button.__proto__||Object.getPrototypeOf(Button)).apply(this,arguments));}babelHelpers.createClass(Button,[{key:'render',value:function render()
 {var _this2=this;
@@ -73736,7 +73781,7 @@ _react2.default.createElement(_reactNative.Text,{style:_styles2.default.buttonTe
 
 
 }}]);return Button;}(_react.Component);exports.default=Button;
-}, 555, null, "sw/app/Button.js");
+}, 556, null, "sw/app/Button.js");
 __d(/* react-native-mqtt/index.js */function(global, require, module, exports) {var _reactNative=require(42 /* react-native */);
 
 
@@ -73839,7 +73884,7 @@ this.eventHandler.remove();
 this.eventHandler=null;
 }
 }};
-}, 556, null, "react-native-mqtt/index.js");
+}, 557, null, "react-native-mqtt/index.js");
 ;require(192);
 ;require(0);
 //# sourceMappingURL=index.android.map
