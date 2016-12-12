@@ -12,7 +12,7 @@ import {
   ActivityIndicator
 } from 'react-native'
 
-//var Spinner = require('react-native-spinkit');
+var Spinner = require('react-native-spinkit');
 import styles from './styles';
 import Button from './Button';
 import {MqttClient} from 'react-native-mqtt';
@@ -149,7 +149,7 @@ export default class ControlPanel extends Component {
           }}
             text={connectedtext}/>
 
-            //<Spinner style={styles.spinner} isVisible={this.state.isVisible} size={75} type={'Circle'} color={"#FFFFFF"}/>
+            <Spinner style={styles.spinner} isVisible={this.state.isVisible} size={75} type={'Circle'} color={"#FFFFFF"}/>
 
             
         </View>
