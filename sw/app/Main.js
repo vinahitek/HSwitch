@@ -84,6 +84,7 @@ async function mqttconnect(IsConnected) {
   })
 }
 
+
 function led1config(value) {
 
   client_mqtt.publish(client_mqtt.options.user + '/hungvotests/onoff', "13 " + (value == true
@@ -116,7 +117,7 @@ export default class ControlPanel extends Component {
     state_switch2: false,
     state_switch3: false,
     serverisconnected: false,
-    isVisible:true
+    isVisible:false
   }
 
   render() {
@@ -138,6 +139,7 @@ export default class ControlPanel extends Component {
 
           <Button
             onPress={() => {
+               this.setState({isVisible:true});
               mqttconnect(this.state.serverisconnected).then((resolve)=>
               {
                   console.log(resolve);
@@ -149,7 +151,7 @@ export default class ControlPanel extends Component {
           }}
             text={connectedtext}/>
 
-            <Spinner style={styles.spinner} isVisible={this.state.isVisible} size={75} type={'Circle'} color={"#FFFFFF"}/>
+            <Spinner style={styles.spinner} isVisible={this.state.isVisible} size={20} type={'Circle'} color={"#FFFFFF"}/>
 
             
         </View>
