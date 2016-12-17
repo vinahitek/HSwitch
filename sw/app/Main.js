@@ -4,105 +4,19 @@ import {
   Switch,
   ScrollView,
   StyleSheet,
-  Text,
   TouchableOpacity,
   View,
   Platform,
   AsyncStorage,
   ActivityIndicator
-} from 'react-native'
+} from 'react-native';
+
+import { Container, Content, List, ListItem,Button, Text, CheckBox } from 'native-base';
 
 var Spinner = require('react-native-spinkit');
-import styles from './styles';
-import Button from './Button';
-import {MqttClient} from 'react-native-mqtt';
-
-var mqtt = require('react-native-mqtt');
-var client_mqtt = undefined;
-
-
-async function mqttconnect(IsConnected) {
-  
-  var clientid = "web_" + parseInt(Math.random() * 100, 10);
-  console.log(clientid);
-  /* create mqtt client */
-  var optionconnect = {
-    host: 'm12.cloudmqtt.com',
-    port: 17935,
-    clientId: clientid,
-    user: "lzwrnmwu",
-    pass: "qODam8loOrFl",
-    auth: true
-  };
-  
-  // return new Promise((resolve, reject) => {
-  //   setTimeout(resolve, 10000)
-  // })
-  let connectedstatus=false;
-  return new Promise((resolve, reject) => {
-     if(IsConnected)
-     {
-       resolve(true);
-       }
-       else
-       {
-     mqtt.createClient(optionconnect)
-      .then(function (client) {
-        client
-          .on('closed', function () {
-            console.log('mqtt.event.closed');
-
-          });
-
-        client.on('error', function (msg) {
-          console.log('mqtt.event.error', msg);
-
-        });
-
-        client.on('message', function (msg) {
-          console.log('mqtt.event.message', msg);
-        });
-
-        client.on('connect', function () {
-          client_mqtt = client;
-          //clientret = client;
-          console.log('connected');
-          //client.subscribe('/data', 0);
-          //client.publish('/data', "test", 0, false);
-          connectedstatus=true;
-          resolve(connectedstatus);
-        });
-
-        client.connect();
-        
-      })
-      .catch(function (err) {
-        console.log(err);
-        reject(err)
-      });
-       }
-  })
-}
-
-
-function led1config(value) {
-
-  client_mqtt.publish(client_mqtt.options.user + '/hungvotests/onoff', "13 " + (value == true
-    ? "1"
-    : "0"), 3, false);
-}
-
-function led2config(value) {
-  client_mqtt.publish(client_mqtt.options.user + '/hungvotests/onoff', "14 " + (value == true
-    ? "1"
-    : "0"), 3, false);
-}
-
-function led3config(value) {
-  client_mqtt.publish(client_mqtt.options.user + '/hungvotests/onoff', "16 " + (value == true
-    ? "1"
-    : "0"), 3, false);
-}
+//import styles from './styles';
+//import ButtonTEst from './Button';
+var mqtt = require('./app_mqtt')
 
 const drawerTypes = ['overlay', 'displace', 'static'];
 
@@ -119,7 +33,7 @@ export default class ControlPanel extends Component {
     serverisconnected: false,
     isVisible:false
   }
-
+//<View style={styles.container}>
   render() {
 
     let connectedtext = this.state.serverisconnected
@@ -127,130 +41,72 @@ export default class ControlPanel extends Component {
       : "Connected";
 
     return (
-      <ScrollView
-        pointerEvents="box-none"
-        style={styles.scrollView}
-        scrollEventThrottle={200}
-        contentInset={{
-        top: 0
-      }}>
-        <View style={styles.container}>
-          <Text style={styles.welcome}>MAIN</Text>
+     <Container>
+     <Content>
+     <Text>MAIN</Text>
+     <List>
 
+<ListItem>
+       
           <Button
             onPress={() => {
                this.setState({isVisible:true});
-              mqttconnect(this.state.serverisconnected).then((resolve)=>
+              mqtt.connecttocloud(this.state.serverisconnected).then((resolve)=>
               {
                   console.log(resolve);
                   this.setState({serverisconnected: resolve,
                     isVisible:!resolve});
                   
-                
               });
           }}
-            text={connectedtext}/>
+          >{connectedtext}</Button>
 
-            <Spinner style={styles.spinner} isVisible={this.state.isVisible} size={20} type={'Circle'} color={"#FFFFFF"}/>
 
-            
-        </View>
+        <Button
+            onPress={() => {
+                  this.setState({isVisible:!this.state.isVisible});
+          }}>
+            Toggle Spinner</Button>
 
-        <View style={styles.container}>
-          <Text style={styles.label}>Led1</Text>
-          <Switch
-            onValueChange={(value) => {
-            led1config(value);
-            this.setState({state_switch1: value})
-          }}
-            style={styles.rowInput}
-            value={this.state.state_switch1}/>
-        </View>
+            <Spinner isVisible={this.state.isVisible} size={50} type={'Circle'} color={"blue"}/>
 
-        <View style={styles.container}>
-          <Text style={styles.label}>Led2</Text>
-          <Switch
-            onValueChange={(value) => {
-            led2config(value);
-            this.setState({state_switch2: value})
-          }}
-            style={styles.rowInput}
-            value={this.state.state_switch2}/>
-        </View>
+          
+        
+            </ListItem>
+</List>
+        </Content>
 
-        <View style={styles.container}>
-          <Text style={styles.label}>Led2</Text>
-          <Switch
-            onValueChange={(value) => {
-            led3config(value);
-            this.setState({state_switch3: value})
-          }}
-            style={styles.rowInput}
-            value={this.state.state_switch3}/>
-        </View>
-      </ScrollView>
+ <Content>
+ <ListItem>
+          <Text>Led1</Text>
+         <CheckBox onPress={()=>{
+           this.setState({state_switch1:!this.state.state_switch1});
+            mqtt.ledcontrol(1,this.state.state_switch1);}}
+            checked={this.state.state_switch1}
+         />
+        </ListItem>
+
+          <ListItem>
+          <Text>Led2</Text>
+         <CheckBox onPress={()=>{
+           this.setState({state_switch2:!this.state.state_switch2});
+            mqtt.ledcontrol(2,this.state.state_switch2);}}
+            checked={this.state.state_switch2}
+         />
+        </ListItem>
+
+  <ListItem>
+          <Text>Led3</Text>
+         <CheckBox onPress={()=>{
+           this.setState({state_switch3:!this.state.state_switch3});
+            mqtt.ledcontrol(3,this.state.state_switch3);}}
+            checked={this.state.state_switch3}
+         />
+        </ListItem>
+
+         </Content>
+    </Container>
+
     )
   }
 }
-
-// iOS Styles
-var iosStyles = StyleSheet.create({
-  track: {
-    height: 2,
-    borderRadius: 1
-  },
-  thumb: {
-    width: 30,
-    height: 30,
-    borderRadius: 30 / 2,
-    backgroundColor: 'white',
-    shadowColor: 'black',
-    shadowOffset: {
-      width: 3,
-      height: 5
-    },
-    shadowRadius: 5,
-    shadowOpacity: 0.75
-  },
-  spinner: {
-    marginBottom: 50
-},
-});
-
-// Android styles
-const androidStyles = StyleSheet.create({
-  container: {
-    height: 40,
-    justifyContent: 'center'
-  },
-  track: {
-    height: 4,
-    borderRadius: 4 / 2
-  },
-  thumb: {
-    position: 'absolute',
-    width: 20,
-    height: 20,
-    borderRadius: 20 / 2
-  },
-  touchArea: {
-    position: 'absolute',
-    backgroundColor: 'transparent',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0
-  },
-  debugThumbTouchArea: {
-    position: 'absolute',
-    backgroundColor: 'green',
-    opacity: 0.5
-  },
-  spinner: {
-    marginBottom: 50
-  },
-});
-
-const sliderStyles = (Platform.OS === 'ios')
-  ? iosStyles
-  : androidStyles;

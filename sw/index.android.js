@@ -12,5 +12,4 @@ import {
   View
 } from 'react-native';
 import MainPage from './app/app'
-//AppRegistry.registerComponent('helloworld', () => MainPage);
 AppRegistry.registerComponent('sw', () => MainPage);

@@ -2,8 +2,24 @@ import { StyleSheet, PixelRatio } from 'react-native';
 const deviceScreen = require('Dimensions').get('window')
 
 module.exports = StyleSheet.create({
+  titlePanel:
+  {
+    flex: 1,
+    backgroundColor:'green'
+  },
+  title:
+  {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 25,
+    backgroundColor:'green'
+  },
+  connectioncontrol:{
+    flex:1,
+    flexDirection:'row'
+  },
   scrollView: {
-    backgroundColor: '#B99BC4',
+    backgroundColor: '#118BF4',
   },
   container: {
     flex: 1,
@@ -104,5 +120,8 @@ module.exports = StyleSheet.create({
     marginRight:20,
     marginLeft:20,
     alignSelf: 'center',
+  },
+  spinner:{
+
   },
 });
