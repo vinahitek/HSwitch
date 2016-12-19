@@ -3,7 +3,7 @@
 try {
     var path = require("path");
     var Launcher = require("C:\\Users\\HungVo\\.vscode\\extensions\\vsmobile.vscode-react-native-0.2.4\\out\\debugger\\launcher.js").Launcher;
-    new Launcher("l:\\HProj\\ESP\\HSwitch\\sw", "l:\\HProj\\ESP\\HSwitch\\sw").launch();
+    new Launcher("i:\\HDev\\HProject\\HSwitch\\sw", "i:\\HDev\\HProject\\HSwitch\\sw").launch();
 } catch (e) {
     throw new Error("Unable to launch application. Try deleting .vscode/launchReactNative.js and restarting vscode.");
 }

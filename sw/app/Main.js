@@ -1,15 +1,15 @@
 'use strict';
 import React, {PropTypes, Component} from 'react';
-import {
-  Switch,
-  ScrollView,
-  StyleSheet,
-  TouchableOpacity,
-  View,
-  Platform,
-  AsyncStorage,
-  ActivityIndicator
-} from 'react-native';
+// import {
+//   Switch,
+//   ScrollView,
+//   StyleSheet,
+//   TouchableOpacity,
+//   View,
+//   Platform,
+//   AsyncStorage,
+//   ActivityIndicator
+// } from 'react-native';
 
 import { Container, Content, List, ListItem,Button, Text, CheckBox } from 'native-base';
 
